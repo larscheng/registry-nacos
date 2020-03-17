@@ -1,0 +1,74 @@
+version: "2"
+services:
+
+  nacos1:
+    container_name: nacos1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      nacos_net:
+        ipv4_address: 172.16.238.10
+    volumes:
+      - ./cluster-logs/nacos1:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/home/nacos/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
+    environment:
+      - NACOS_SERVER_IP=10.16.10.166
+      - NACOS_SERVER_PORT=8848
+    env_file:
+      - ./env/nacos-ip.env
+    restart: on-failure
+
+  nacos2:
+    container_name: nacos2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      nacos_net:
+        ipv4_address: 172.16.238.11
+    volumes:
+      - ./cluster-logs/nacos2:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/home/nacos/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8849:8849"
+    environment:
+      - NACOS_SERVER_IP=10.16.10.166
+      - NACOS_SERVER_PORT=8849
+    env_file:
+      - ./env/nacos-ip.env
+    restart: on-failure
+
+  nacos3:
+    container_name: nacos3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      nacos_net:
+        ipv4_address: 172.16.238.12
+    volumes:
+      - ./cluster-logs/nacos3:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/home/nacos/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8850:8850"
+    environment:
+      - NACOS_SERVER_IP=10.16.10.166
+      - NACOS_SERVER_PORT=8850
+    env_file:
+      - ./env/nacos-ip.env
+    restart: on-failure
+
+
+networks:
+  nacos_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24

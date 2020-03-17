@@ -1,0 +1,27 @@
+version: "2"
+services:
+  nacos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nacos-standalone-mysql
+    environment:
+      - PREFER_HOST_MODE=ip
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_MASTER_SERVICE_HOST=10.16.10.246
+      - MYSQL_MASTER_SERVICE_DB_NAME=nacos
+      - MYSQL_MASTER_SERVICE_PORT=3306
+      - MYSQL_SLAVE_SERVICE_HOST=10.16.10.246
+      - MYSQL_SLAVE_SERVICE_PORT=3306
+      - MYSQL_MASTER_SERVICE_USER=root
+      - MYSQL_MASTER_SERVICE_PASSWORD=123456
+    volumes:
+      - ./standalone-logs/:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/home/nacos/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
+    restart: on-failure
+
+

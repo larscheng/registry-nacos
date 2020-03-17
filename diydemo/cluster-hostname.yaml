@@ -1,0 +1,49 @@
+version: "3"
+services:
+  nacos1:
+    hostname: nacos1
+    container_name: nacos1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./cluster-logs/nacos1:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/home/nacos/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
+    env_file:
+      - ./env/nacos-hostname.env
+    restart: on-failure
+
+  nacos2:
+    hostname: nacos2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nacos2
+    volumes:
+      - ./cluster-logs/nacos2:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/root/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8849:8848"
+    env_file:
+      - ./env/nacos-hostname.env
+    restart: on-failure
+
+  nacos3:
+    hostname: nacos3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nacos3
+    volumes:
+      - ./cluster-logs/nacos3:/home/nacos/logs
+      - ./init.d/nacos-logback.xml:/home/nacos/conf/nacos-logback.xml
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8850:8848"
+    env_file:
+      - ./env/nacos-hostname.env
+    restart: on-failure
